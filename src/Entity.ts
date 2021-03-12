@@ -1,22 +1,42 @@
+import Keyboard from "./Keyboard";
+
 type Vector = {
   x: number;
   y: number;
 };
 
+type Size = {
+  width: number;
+  height: number;
+};
+
 export default abstract class Entity {
-  private pos: Vector;
+  // Members
+  public pos: Vector;
+  public size: Size;
   public image: HTMLImageElement = new Image();
+  public speed: number;
+  public ctxBoundries: DOMRect;
 
-  constructor(image: string) {
+  // Constructor
+  constructor(image: string, ctxBoundries: DOMRect) {
     this.pos = { x: 0, y: 0 };
+    this.size = { width: 100, height: 100 };
     this.image.src = image;
-  }
-  update(): void {
-    this.pos.x += 0.1;
-    this.pos.y += 0.1;
+    this.speed = 0;
+    this.ctxBoundries = ctxBoundries;
   }
 
-  draw(ctx: CanvasRenderingContext2D): void {
-    ctx.drawImage(this.image, this.pos.x, this.pos.y, 25, 25);
+  // Public members
+  public update(keyboard: Keyboard): void {}
+
+  public draw(ctx: CanvasRenderingContext2D): void {
+    ctx.drawImage(
+      this.image,
+      this.pos.x,
+      this.pos.y,
+      this.size.width,
+      this.size.height
+    );
   }
 }

@@ -1,16 +1,24 @@
-class Keyboard {
+export default class Keyboard {
   // Members
-  _keysPressed: boolean[] = [];
+  private keysPressed: boolean[] = [];
 
   // Constructor
   constructor() {
-    document.addEventListener("keydown", (e) => this.keyPressed(e));
+    document.addEventListener("keydown", (e) => this.keyDown(e));
+    document.addEventListener("keyup", (e) => this.keyUp(e));
+  }
+
+  // Public methods
+  public isPressed(key: string): boolean {
+    return this.keysPressed[key];
   }
 
   // Private methods
-  private keyPressed(e: KeyboardEvent): void {
-    this._keysPressed[e.keyCode] = true;
+  private keyDown(e: KeyboardEvent): void {
+    this.keysPressed[e.key] = true;
+  }
+
+  private keyUp(e: KeyboardEvent): void {
+    this.keysPressed[e.key] = false;
   }
 }
-
-export const keyboard = new Keyboard();
