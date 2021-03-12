@@ -2,11 +2,17 @@ import Entity from "./Entity";
 import Keyboard from "./Keyboard";
 
 export default class Player extends Entity {
+  // Members
+  private ctxBoundries: DOMRect;
+  private margin = 100;
+
   // Constructor
   constructor(image: string, ctxBoundries: DOMRect) {
-    super(image, ctxBoundries);
+    super(image);
     this.image.src = image;
-    this.speed = 5;
+    this.ctxBoundries = ctxBoundries;
+    this.speed = 15;
+    this.margin = 100;
   }
 
   // Public methods
@@ -21,15 +27,18 @@ export default class Player extends Entity {
     );
   }
 
-  public isTouchingRight() {
+  public isApproachingRight() {
     return (
       this.pos.x >=
-      this.ctxBoundries.right - this.ctxBoundries.left - this.size.width
+      this.ctxBoundries.right -
+        this.ctxBoundries.left -
+        this.size.width -
+        this.margin
     );
   }
 
-  public isTouchingLeft() {
-    return this.pos.x <= 0;
+  public isApproacingLeft() {
+    return this.pos.x <= 0 + this.margin;
   }
 
   // Private methods
@@ -45,12 +54,12 @@ export default class Player extends Entity {
       }
     }
     if (keyboard.isPressed("ArrowLeft")) {
-      if (!this.isTouchingLeft()) {
+      if (!this.isApproacingLeft()) {
         this.pos.x -= this.speed;
       }
     }
     if (keyboard.isPressed("ArrowRight")) {
-      if (!this.isTouchingRight()) {
+      if (!this.isApproachingRight()) {
         this.pos.x += this.speed;
       }
     }

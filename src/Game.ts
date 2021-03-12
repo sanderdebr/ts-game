@@ -5,6 +5,7 @@ import Player from "./Player";
 import Keyboard from "./Keyboard";
 
 import PLAYER_IMAGE from "./images/player.png";
+import Scene from "./Scene";
 
 export default class Game {
   // Members
@@ -12,6 +13,7 @@ export default class Game {
   private player: Player;
   private entities: Map<string, Entity> = new Map();
   private keyboard: Keyboard;
+  private scene: Scene;
 
   private static instance: Game;
 
@@ -21,6 +23,7 @@ export default class Game {
     this.player = new Player(PLAYER_IMAGE, this.canvas2D.boundries);
     this.entities.set("player", this.player);
     this.keyboard = new Keyboard();
+    this.scene = new Scene();
     this.gameLoop();
   }
 
@@ -28,6 +31,8 @@ export default class Game {
   private gameLoop(): void {
     this.canvas2D.clear();
     this.canvas2D.drawBackground(GAME_CONFIG.BACKGROUND_COLOR);
+    this.scene.update(this.player); //TODO: Make position private
+    this.scene.draw(this.canvas2D.ctx);
     this.updateEntities();
     requestAnimationFrame(this.gameLoop.bind(this));
   }

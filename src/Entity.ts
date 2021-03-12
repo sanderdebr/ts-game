@@ -1,14 +1,5 @@
 import Keyboard from "./Keyboard";
-
-type Vector = {
-  x: number;
-  y: number;
-};
-
-type Size = {
-  width: number;
-  height: number;
-};
+import { Size, Vector } from "./types";
 
 export default abstract class Entity {
   // Members
@@ -16,15 +7,13 @@ export default abstract class Entity {
   public size: Size;
   public image: HTMLImageElement = new Image();
   public speed: number;
-  public ctxBoundries: DOMRect;
 
   // Constructor
-  constructor(image: string, ctxBoundries: DOMRect) {
-    this.pos = { x: 0, y: 0 };
+  constructor(image: string) {
+    this.pos = { x: 0, y: 500 };
     this.size = { width: 100, height: 100 };
     this.image.src = image;
     this.speed = 0;
-    this.ctxBoundries = ctxBoundries;
   }
 
   // Public members
