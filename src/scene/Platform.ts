@@ -20,6 +20,8 @@ export default class Platform implements IGameObject {
     this.size = { width: 500, height: 80 };
     this.image.src = GRASS_IMAGE;
     this.image.onload = this.createPattern.bind(this);
+
+    this.playerIsOnThisPlatform = false;
   }
 
   // Public methods
@@ -81,6 +83,16 @@ export default class Platform implements IGameObject {
       this.playerIsOnThisPlatform = true;
       player.isOnPlatform = true;
       player.platformY = this.pos.y - this.size.height;
+    }
+
+    if (this.playerIsOnThisPlatform) {
+      console.log(this.pos);
+      console.log(this.isOnTop(player));
+      console.log(player.pos);
+
+      console.log(player.pos.x + player.size.width >= this.pos.x);
+      console.log(player.pos.x < this.pos.x + this.size.width);
+      console.log(player.pos.y + player.size.height <= this.pos.y);
     }
 
     if (this.playerIsOnThisPlatform) {

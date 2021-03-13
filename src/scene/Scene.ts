@@ -21,11 +21,13 @@ export default class Scene implements IGameObject {
     this.canvas = canvas;
     this.player = player;
     this.pos = { x: 0, y: 0 };
-    this.size = { width: 1400, height: 600 };
+    this.size = { width: 2500, height: 600 };
     this.image.src = BG_IMAGE;
     this.image.onload = this.createPattern.bind(this);
 
-    this.addPlatform();
+    this.addPlatform(200, 400);
+    this.addPlatform(600, 200);
+    this.addPlatform(1000, 400);
   }
 
   // Public methods
@@ -69,9 +71,9 @@ export default class Scene implements IGameObject {
     this.pattern = this.canvas.ctx.createPattern(this.image, "repeat-x");
   }
 
-  private addPlatform(): void {
-    this.platforms.push(new Platform(this.canvas, 200, 400));
-    this.platforms.push(new Platform(this.canvas, 500, 200));
+  private addPlatform(x: number, y: number): void {
+    const platform = new Platform(this, this.canvas, x, y);
+    this.platforms.push(platform);
   }
 
   private reachedLeftEnd(): boolean {

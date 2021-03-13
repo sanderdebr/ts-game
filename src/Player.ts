@@ -73,10 +73,8 @@ export default class Player extends Entity {
   private handlePosition(): void {
     this.isOnGround = this.pos.y > this.getBottomOfScreen();
 
-    if (!this.isHittingPlatform) {
-      this.velocityY += this.gravity;
-      this.pos.y += this.velocityY;
-    }
+    this.velocityY += this.gravity;
+    this.pos.y += this.velocityY;
 
     if (this.isOnGround) {
       this.pos.y = this.getBottomOfScreen();
