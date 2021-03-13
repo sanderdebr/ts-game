@@ -1,23 +1,21 @@
-import Keyboard from "./Keyboard";
+import { IGameObject } from "./interfaces";
 import { Size, Vector } from "./types";
 
-export default abstract class Entity {
+export default abstract class Entity implements IGameObject {
   // Members
   public pos: Vector;
   public size: Size;
   public image: HTMLImageElement = new Image();
-  public speed: number;
+  public velocityX: number;
+  public velocityY: number;
 
   // Constructor
   constructor(image: string) {
-    this.pos = { x: 0, y: 500 };
-    this.size = { width: 100, height: 100 };
     this.image.src = image;
-    this.speed = 0;
   }
 
   // Public members
-  public update(keyboard: Keyboard): void {}
+  public update(any): void {}
 
   public draw(ctx: CanvasRenderingContext2D): void {
     ctx.drawImage(

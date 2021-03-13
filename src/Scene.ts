@@ -21,7 +21,7 @@ export default class Scene {
 
   // Private methods
   private createPattern(): void {
-    const pattern = this.ctx.createPattern(this.image, "repeat");
+    const pattern = this.ctx.createPattern(this.image, "repeat-x");
     this.ctx.fillStyle = pattern;
   }
   private reachedLeftEnd(): boolean {
@@ -33,10 +33,18 @@ export default class Scene {
   }
 
   private updateScene(player: Player): void {
-    if (player.isApproacingLeft() && !this.reachedLeftEnd()) {
+    if (
+      player.isApproacingLeft() &&
+      !this.reachedLeftEnd() &&
+      player.isMoving
+    ) {
       this.pos.x += 5;
     }
-    if (player.isApproachingRight() && !this.reachedRightEnd()) {
+    if (
+      player.isApproachingRight() &&
+      !this.reachedRightEnd() &&
+      player.isMoving
+    ) {
       this.pos.x -= 5;
     }
   }
