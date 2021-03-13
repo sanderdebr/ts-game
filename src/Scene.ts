@@ -13,7 +13,7 @@ export default class Scene {
   constructor(ctx: CanvasRenderingContext2D) {
     this.ctx = ctx;
     this.pos = { x: 0, y: 0 };
-    this.size = { width: 5000, height: 600 };
+    this.size = { width: 1400, height: 600 };
     this.image.src = BG_IMAGE;
 
     this.image.onload = this.createPattern.bind(this);
@@ -32,20 +32,30 @@ export default class Scene {
     return this.pos.x >= this.size.width;
   }
 
+  private move(direction: string): void {
+    switch (direction) {
+      case "right":
+        this.pos.x += 5;
+        break;
+      case "left":
+        this.pos.x -= 5;
+    }
+  }
+
   private updateScene(player: Player): void {
     if (
-      player.isApproacingLeft() &&
+      player.reachedLeftEnd() &&
       !this.reachedLeftEnd() &&
-      player.isMoving
+      player.movingDirection === "left"
     ) {
-      this.pos.x += 5;
+      this.move("right");
     }
     if (
-      player.isApproachingRight() &&
+      player.reachedRightEnd() &&
       !this.reachedRightEnd() &&
-      player.isMoving
+      player.movingDirection === "right"
     ) {
-      this.pos.x -= 5;
+      this.move("left");
     }
   }
 

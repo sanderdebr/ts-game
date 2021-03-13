@@ -8,7 +8,7 @@ export default class Player extends Entity {
   private gravity: number;
   private jumpStrength: number;
   private isOnGround: boolean;
-  public isMoving: boolean;
+  public movingDirection: string | null;
 
   // Constructor
   constructor(image: string, ctxBoundries: DOMRect) {
@@ -16,10 +16,10 @@ export default class Player extends Entity {
     this.ctxBoundries = ctxBoundries;
     this.pos = { x: 0, y: 500 };
     this.size = { width: 80, height: 80 };
-    this.gravity = 0.75;
+    this.gravity = 0.65;
     this.velocityX = 10;
     this.velocityY = 0;
-    this.jumpStrength = 15;
+    this.jumpStrength = 17.5;
   }
 
   // Public methods
@@ -28,7 +28,7 @@ export default class Player extends Entity {
     this.handleKeyboard(keyboard);
   }
 
-  public isApproachingRight(): boolean {
+  public reachedRightEnd(): boolean {
     return (
       this.pos.x >=
       this.ctxBoundries.right -
@@ -38,30 +38,17 @@ export default class Player extends Entity {
     );
   }
 
-  public isApproacingLeft(): boolean {
+  public reachedLeftEnd(): boolean {
     return this.pos.x <= 0 + GAME_CONFIG.SCREEN_MARGIN;
   }
 
   // Private methods
-  private getBottomOfScreen(): number {
-    return this.ctxBoundries.bottom - this.ctxBoundries.top - this.size.height;
-  }
-
-  private moveLeft(): void {
-    this.pos.x -= this.velocityX;
-  }
-
-  private moveRight(): void {
-    this.isMoving = true;
-    this.pos.x += this.velocityX;
-  }
-
   private isTouchingTop(): boolean {
     return this.pos.y <= 0;
   }
 
-  private jump(): void {
-    this.velocityY = -this.jumpStrength;
+  private getBottomOfScreen(): number {
+    return this.ctxBoundries.bottom - this.ctxBoundries.top - this.size.height;
   }
 
   private checkIfOnGround(): void {
@@ -70,6 +57,21 @@ export default class Player extends Entity {
     } else {
       this.isOnGround = false;
     }
+  }
+
+  private move(): void {
+    switch (this.movingDirection) {
+      case "left":
+        this.pos.x -= this.velocityX;
+        break;
+      case "right":
+        this.pos.x += this.velocityX;
+        break;
+    }
+  }
+
+  private jump(): void {
+    this.velocityY = -this.jumpStrength;
   }
 
   private handlePosition(): void {
@@ -87,23 +89,26 @@ export default class Player extends Entity {
 
   private handleKeyboard(keyboard: Keyboard): void {
     if (keyboard.isPressed(" ")) {
+      this.movingDirection = "up";
       if (!this.isTouchingTop() && this.isOnGround) {
         this.jump();
       }
       return;
     }
     if (keyboard.isPressed("ArrowLeft")) {
-      if (!this.isApproacingLeft()) {
-        this.moveLeft();
+      this.movingDirection = "left";
+      if (!this.reachedLeftEnd()) {
+        this.move();
       }
       return;
     }
     if (keyboard.isPressed("ArrowRight")) {
-      if (!this.isApproachingRight()) {
-        this.moveRight();
+      this.movingDirection = "right";
+      if (!this.reachedRightEnd()) {
+        this.move();
       }
       return;
     }
-    this.isMoving = false;
+    this.movingDirection = null;
   }
 }
