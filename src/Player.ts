@@ -16,17 +16,6 @@ export default class Player extends Entity {
   }
 
   // Public methods
-  public isTouchingTop() {
-    return this.pos.y <= 0;
-  }
-
-  public isTouchingBottom() {
-    return (
-      this.pos.y >=
-      this.ctxBoundries.bottom - this.ctxBoundries.top - this.size.height
-    );
-  }
-
   public isApproachingRight() {
     return (
       this.pos.x >=
@@ -42,25 +31,52 @@ export default class Player extends Entity {
   }
 
   // Private methods
+  private moveUp() {
+    this.pos.y -= this.speed;
+  }
+
+  private moveDown() {
+    this.pos.y += this.speed;
+  }
+
+  private moveLeft() {
+    this.pos.x -= this.speed;
+  }
+
+  private moveRight() {
+    this.pos.x += this.speed;
+  }
+
+  private isTouchingTop() {
+    return this.pos.y <= 0;
+  }
+
+  private isTouchingBottom() {
+    return (
+      this.pos.y >=
+      this.ctxBoundries.bottom - this.ctxBoundries.top - this.size.height
+    );
+  }
+
   private updatePosition(keyboard: Keyboard): void {
     if (keyboard.isPressed("ArrowUp")) {
       if (!this.isTouchingTop()) {
-        this.pos.y -= this.speed;
+        this.moveUp();
       }
     }
     if (keyboard.isPressed("ArrowDown")) {
       if (!this.isTouchingBottom()) {
-        this.pos.y += this.speed;
+        this.moveDown();
       }
     }
     if (keyboard.isPressed("ArrowLeft")) {
       if (!this.isApproacingLeft()) {
-        this.pos.x -= this.speed;
+        this.moveLeft();
       }
     }
     if (keyboard.isPressed("ArrowRight")) {
       if (!this.isApproachingRight()) {
-        this.pos.x += this.speed;
+        this.moveRight();
       }
     }
   }

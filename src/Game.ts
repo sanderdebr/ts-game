@@ -23,7 +23,7 @@ export default class Game {
     this.player = new Player(PLAYER_IMAGE, this.canvas2D.boundries);
     this.entities.set("player", this.player);
     this.keyboard = new Keyboard();
-    this.scene = new Scene();
+    this.scene = new Scene(this.canvas2D.ctx);
     this.gameLoop();
   }
 
@@ -31,8 +31,7 @@ export default class Game {
   private gameLoop(): void {
     this.canvas2D.clear();
     this.canvas2D.drawBackground(GAME_CONFIG.BACKGROUND_COLOR);
-    this.scene.update(this.player); //TODO: Make position private
-    this.scene.draw(this.canvas2D.ctx);
+    this.scene.updateAndDraw(this.player); //TODO: Make position private
     this.updateEntities();
     requestAnimationFrame(this.gameLoop.bind(this));
   }
