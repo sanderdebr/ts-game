@@ -1,4 +1,5 @@
 import Canvas2D from "./Canvas2D";
+import Player from "./Player";
 import { Size, Vector } from "./types";
 
 export interface IGameObject {
@@ -9,6 +10,6 @@ export interface IGameObject {
   canvas: Canvas2D;
 
   // Methods
-  update(): void;
-  draw(): void;
+  update(ctx?: CanvasRenderingContext2D, player?: Player): void;
+  draw(ctx?: CanvasRenderingContext2D): void;
 }

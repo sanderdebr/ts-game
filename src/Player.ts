@@ -12,6 +12,7 @@ export default class Player extends Entity {
   public movingDirection: string | null;
   public isOnPlatform: boolean;
   public platformY: number;
+  public isHittingPlatform: boolean;
 
   // Constructor
   constructor(image: string, canvas: Canvas2D, keyboard: Keyboard) {
@@ -72,8 +73,10 @@ export default class Player extends Entity {
   private handlePosition(): void {
     this.isOnGround = this.pos.y > this.getBottomOfScreen();
 
-    this.velocityY += this.gravity;
-    this.pos.y += this.velocityY;
+    if (!this.isHittingPlatform) {
+      this.velocityY += this.gravity;
+      this.pos.y += this.velocityY;
+    }
 
     if (this.isOnGround) {
       this.pos.y = this.getBottomOfScreen();
@@ -81,8 +84,16 @@ export default class Player extends Entity {
     }
 
     if (this.isOnPlatform) {
-      this.pos.y = this.platformY;
-      this.velocityY = 0;
+      if (this.pos.y >= this.platformY) {
+        this.pos.y = this.platformY;
+        this.velocityY = 0;
+      }
+    }
+
+    if (this.isHittingPlatform) {
+      this.velocityY = 20;
+      this.pos.y += this.velocityY;
+      this.isHittingPlatform = false;
     }
   }
 

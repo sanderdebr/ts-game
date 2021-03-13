@@ -70,8 +70,8 @@ export default class Scene implements IGameObject {
   }
 
   private addPlatform(): void {
-    const platform = new Platform(this.canvas);
-    this.platforms.push(platform);
+    this.platforms.push(new Platform(this.canvas, 200, 400));
+    this.platforms.push(new Platform(this.canvas, 500, 200));
   }
 
   private reachedLeftEnd(): boolean {

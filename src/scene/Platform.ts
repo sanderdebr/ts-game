@@ -4,18 +4,19 @@ import { IGameObject } from "../interfaces";
 import { Size, Vector } from "../types";
 import Player from "../Player";
 
-export default class Platform {
+export default class Platform implements IGameObject {
   // Members
   public canvas: Canvas2D;
   public pos: Vector;
   public size: Size;
   public image: HTMLImageElement = new Image();
   private pattern: CanvasPattern;
+  private playerIsOnThisPlatform: boolean;
 
   // Constructor
-  constructor(canvas: Canvas2D) {
+  constructor(canvas: Canvas2D, x: number, y: number) {
     this.canvas = canvas;
-    this.pos = { x: 400, y: 400 };
+    this.pos = { x, y };
     this.size = { width: 500, height: 80 };
     this.image.src = GRASS_IMAGE;
     this.image.onload = this.createPattern.bind(this);
@@ -32,20 +33,65 @@ export default class Platform {
   }
 
   // Private methods
-  detectCollision(player: Player) {
-    if (
-      player.pos.x >= this.pos.x &&
+  private isOnTop(player: Player): boolean {
+    return (
+      player.pos.x + player.size.width >= this.pos.x &&
       player.pos.x < this.pos.x + this.size.width &&
       player.pos.y + player.size.height <= this.pos.y
+    );
+  }
+
+  private isHittingLeft(player: Player): boolean {
+    return (
+      player.pos.x + player.size.width >= this.pos.x &&
+      player.pos.x <= this.pos.x &&
+      player.pos.y >= this.pos.y &&
+      player.pos.y <= this.pos.y + this.size.height
+    );
+  }
+
+  private isHittingRight(player: Player): boolean {
+    return (
+      player.pos.x <= this.pos.x + this.size.width &&
+      player.pos.x >= this.pos.x + this.size.width - player.size.width &&
+      player.pos.y >= this.pos.y &&
+      player.pos.y <= this.pos.y + this.size.height
+    );
+  }
+
+  private isHittingBottom(player: Player): boolean {
+    return (
+      player.pos.x + player.size.width >= this.pos.x &&
+      player.pos.x <= this.pos.x + this.size.width &&
+      player.pos.y >= this.pos.y &&
+      player.pos.y <= this.pos.y + this.size.height
+    );
+  }
+
+  private detectCollision(player: Player): void {
+    if (
+      this.isHittingRight(player) ||
+      this.isHittingLeft(player) ||
+      this.isHittingBottom(player)
     ) {
+      player.isHittingPlatform = true;
+    }
+
+    if (this.isOnTop(player)) {
+      this.playerIsOnThisPlatform = true;
       player.isOnPlatform = true;
       player.platformY = this.pos.y - this.size.height;
-    } else {
-      player.isOnPlatform = false;
+    }
+
+    if (this.playerIsOnThisPlatform) {
+      if (!this.isOnTop(player)) {
+        this.playerIsOnThisPlatform = false;
+        player.isOnPlatform = false;
+      }
     }
   }
 
-  createPattern(): void {
+  private createPattern(): void {
     this.pattern = this.canvas.ctx.createPattern(this.image, "repeat");
   }
 }
