@@ -1,3 +1,4 @@
+import Canvas2D from "./Canvas2D";
 import { Size, Vector } from "./types";
 
 export interface IGameObject {
@@ -5,11 +6,9 @@ export interface IGameObject {
   pos: Vector;
   size: Size;
   image: HTMLImageElement;
-  velocityX: number;
-  velocityY: number;
+  canvas: Canvas2D;
 
   // Methods
-  update(any): void;
-
-  draw(ctx: CanvasRenderingContext2D): void;
+  update(): void;
+  draw(): void;
 }
