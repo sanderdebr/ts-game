@@ -13,10 +13,13 @@ export default class Platform implements IGameObject {
   private pattern: CanvasPattern;
   private playerIsOnThisPlatform: boolean;
 
+  public detectPos: Vector;
+
   // Constructor
   constructor(canvas: Canvas2D, x: number, y: number) {
     this.canvas = canvas;
     this.pos = { x, y };
+    this.detectPos = { x, y };
     this.size = { width: 500, height: 80 };
     this.image.src = GRASS_IMAGE;
     this.image.onload = this.createPattern.bind(this);
@@ -37,16 +40,16 @@ export default class Platform implements IGameObject {
   // Private methods
   private isOnTop(player: Player): boolean {
     return (
-      player.pos.x + player.size.width >= this.pos.x &&
-      player.pos.x < this.pos.x + this.size.width &&
+      player.pos.x + player.size.width >= this.detectPos.x &&
+      player.pos.x < this.detectPos.x + this.size.width &&
       player.pos.y + player.size.height <= this.pos.y
     );
   }
 
   private isHittingLeft(player: Player): boolean {
     return (
-      player.pos.x + player.size.width >= this.pos.x &&
-      player.pos.x <= this.pos.x &&
+      player.pos.x + player.size.width >= this.detectPos.x &&
+      player.pos.x <= this.detectPos.x &&
       player.pos.y >= this.pos.y &&
       player.pos.y <= this.pos.y + this.size.height
     );
@@ -54,8 +57,8 @@ export default class Platform implements IGameObject {
 
   private isHittingRight(player: Player): boolean {
     return (
-      player.pos.x <= this.pos.x + this.size.width &&
-      player.pos.x >= this.pos.x + this.size.width - player.size.width &&
+      player.pos.x <= this.detectPos.x + this.size.width &&
+      player.pos.x >= this.detectPos.x + this.size.width - player.size.width &&
       player.pos.y >= this.pos.y &&
       player.pos.y <= this.pos.y + this.size.height
     );
@@ -63,8 +66,8 @@ export default class Platform implements IGameObject {
 
   private isHittingBottom(player: Player): boolean {
     return (
-      player.pos.x + player.size.width >= this.pos.x &&
-      player.pos.x <= this.pos.x + this.size.width &&
+      player.pos.x + player.size.width >= this.detectPos.x &&
+      player.pos.x <= this.detectPos.x + this.size.width &&
       player.pos.y >= this.pos.y &&
       player.pos.y <= this.pos.y + this.size.height
     );
@@ -83,16 +86,6 @@ export default class Platform implements IGameObject {
       this.playerIsOnThisPlatform = true;
       player.isOnPlatform = true;
       player.platformY = this.pos.y - this.size.height;
-    }
-
-    if (this.playerIsOnThisPlatform) {
-      console.log(this.pos);
-      console.log(this.isOnTop(player));
-      console.log(player.pos);
-
-      console.log(player.pos.x + player.size.width >= this.pos.x);
-      console.log(player.pos.x < this.pos.x + this.size.width);
-      console.log(player.pos.y + player.size.height <= this.pos.y);
     }
 
     if (this.playerIsOnThisPlatform) {

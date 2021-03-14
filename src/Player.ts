@@ -20,7 +20,7 @@ export default class Player extends Entity {
     this.keyboard = keyboard;
     this.pos = { x: 0, y: 500 };
     this.size = { width: 80, height: 80 };
-    this.gravity = 0.65;
+    this.gravity = 0.8;
     this.velocityX = 10;
     this.velocityY = 0;
     this.jumpStrength = 17.5;

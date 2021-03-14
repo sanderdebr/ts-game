@@ -32,8 +32,6 @@ export default class Scene implements IGameObject {
 
   // Public methods
   public update(): void {
-    this.canvas.ctx.save();
-
     if (
       this.player.reachedLeftEnd() &&
       !this.reachedLeftEnd() &&
@@ -55,6 +53,7 @@ export default class Scene implements IGameObject {
   }
 
   public draw(): void {
+    this.canvas.ctx.save();
     this.canvas.ctx.fillStyle = this.pattern;
     this.canvas.ctx.translate(this.pos.x, this.pos.y);
     this.canvas.ctx.fillRect(0, 0, this.size.width, this.size.height);
@@ -72,7 +71,7 @@ export default class Scene implements IGameObject {
   }
 
   private addPlatform(x: number, y: number): void {
-    const platform = new Platform(this, this.canvas, x, y);
+    const platform = new Platform(this.canvas, x, y);
     this.platforms.push(platform);
   }
 
@@ -92,5 +91,9 @@ export default class Scene implements IGameObject {
       case "left":
         this.pos.x -= 5;
     }
+
+    this.platforms.forEach((platform) => {
+      platform.detectPos.x = platform.pos.x + this.pos.x;
+    });
   }
 }
