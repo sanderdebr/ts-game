@@ -1,9 +1,13 @@
-export default class Keyboard {
+import Player from "../characters/Player";
+import GameObject from "../game/GameObject";
+
+export default class Keyboard extends GameObject {
   // Members
   private keysPressed: boolean[] = [];
 
   // Constructor
   constructor() {
+    super();
     document.addEventListener("keydown", (e) => this.keyDown(e));
     document.addEventListener("keyup", (e) => this.keyUp(e));
   }

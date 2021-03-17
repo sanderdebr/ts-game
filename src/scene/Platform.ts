@@ -2,7 +2,7 @@ import GRASS_IMAGE from "../images/grass.png";
 import Canvas2D from "../Canvas2D";
 import { IGameObject } from "../interfaces";
 import { Size, Vector } from "../types";
-import Player from "../Player";
+import Player from "../characters/Player";
 
 export default class Platform implements IGameObject {
   // Members

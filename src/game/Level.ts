@@ -1,11 +1,11 @@
 import BG_IMAGE from "../images/background.png";
 import { Size, Vector } from "../types";
-import Player from "../Player";
+import Player from "../characters/Player";
 import Canvas2D from "../Canvas2D";
 import { IGameObject } from "../interfaces";
-import Platform from "./Platform";
+import Platform from "../scene/Platform";
 
-export default class Scene implements IGameObject {
+export default class Level implements IGameObject {
   // Members
   public canvas: Canvas2D;
   public player: Player;

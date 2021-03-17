@@ -1,29 +1,30 @@
-import Canvas2D from "./Canvas2D";
-import { GAME_CONFIG } from "./config";
-import Entity from "./Entity";
-import Keyboard from "./input/Keyboard";
+import Canvas2D from "../Canvas2D";
+import { GAME_CONFIG } from "../config";
+import PLAYER_IMAGE from "../images/player.png";
+import Keyboard from "../input/Keyboard";
+import Character from "./Character";
 
-export default class Player extends Entity {
+export default class Player extends Character {
   // Members
-  private keyboard: Keyboard;
   private gravity: number;
   private jumpStrength: number;
   private isOnGround: boolean;
+
   public movingDirection: string | null;
   public isOnPlatform: boolean;
   public platformY: number;
   public isHittingPlatform: boolean;
 
   // Constructor
-  constructor(image: string, canvas: Canvas2D, keyboard: Keyboard) {
-    super(image, canvas);
-    this.keyboard = keyboard;
+  constructor(canvas: Canvas2D, keyboard: Keyboard) {
+    super(canvas, keyboard);
     this.pos = { x: 0, y: 500 };
     this.size = { width: 80, height: 80 };
-    this.gravity = 0.8;
+    this.gravity = 1;
     this.velocityX = 10;
     this.velocityY = 0;
-    this.jumpStrength = 17.5;
+    this.jumpStrength = 25;
+    this.image.src = PLAYER_IMAGE;
   }
 
   // Public methods
@@ -89,7 +90,7 @@ export default class Player extends Entity {
     }
 
     if (this.isHittingPlatform) {
-      this.velocityY = 20;
+      this.velocityY = this.jumpStrength;
       this.pos.y += this.velocityY;
       this.isHittingPlatform = false;
     }
