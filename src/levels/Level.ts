@@ -15,6 +15,7 @@ export default class Level extends Renderable implements Subject {
     super();
     this.canvas2D = canvas2D;
     this.pos = { x: 0, y: 0 };
+    this.speed = 10;
     this.size = {
       width: GAME_CONFIG.LEVEL_WIDTH,
       height: this.canvas2D.height,
