@@ -1,22 +1,24 @@
-import { IObserver } from "./../interfaces/IObserver";
-import GameObject from "../game/GameObject";
-import Canvas2D from "../Canvas2D";
-import Keyboard from "../input/Keyboard";
+import Canvas2D from "../game/Canvas2D";
+import Renderable from "../game/Renderable";
+import { Observer } from "../interfaces/Observer";
 
-export default class Character extends GameObject implements IObserver {
+export default class Character extends Renderable implements Observer {
   //Members
   protected canvasPos: DOMRect;
+  protected gravity: number;
+  protected friction: number;
+  protected velocityX: number;
+  protected velocityY: number;
 
   // Constructor
-  protected constructor(canvas: Canvas2D, keyboard: Keyboard) {
+  protected constructor(canvas2D: Canvas2D) {
     super();
-    this.canvas = canvas;
-    this.keyboard = keyboard;
+    this.canvas2D = canvas2D;
     this.image = new Image();
-    this.canvasPos = this.canvas.boundries;
   }
 
   // Public methods
   public update(): void {}
-  public notify(): void {}
+
+  public notify(any: any): void {}
 }

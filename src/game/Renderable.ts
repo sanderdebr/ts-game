@@ -1,23 +1,23 @@
-import Canvas2D from "../Canvas2D";
-import Keyboard from "../input/Keyboard";
 import { Size } from "../types/Size";
 import { Vector } from "../types/Vector";
+import Canvas2D from "./Canvas2D";
 
-export default abstract class GameObject {
+export default abstract class Renderable {
   // abstract methods have to be implemented
   // protected is available on instances only
-  protected canvas: Canvas2D;
-  protected keyboard: Keyboard;
+  protected canvas2D: Canvas2D;
   protected image: HTMLImageElement;
+
   protected pos: Vector;
   protected size: Size;
-  protected velocityX: number;
-  protected velocityY: number;
+  protected speed: number;
+
+  protected move(direction: string): void {}
 
   protected update(): void {}
 
   protected draw(): void {
-    this.canvas.ctx.drawImage(
+    this.canvas2D.ctx.drawImage(
       this.image,
       this.pos.x,
       this.pos.y,
