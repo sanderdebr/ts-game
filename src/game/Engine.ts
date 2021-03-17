@@ -34,35 +34,40 @@ export default class Engine {
     }
 
     if (this.keyboard.getKey("ArrowLeft")) {
-      const notReachedLevelStart = this.level.posX !== 0;
+      const reachedLevelStart = this.level.posX >= 0;
 
-      const notReachedScreenStart =
-        this.player.posX > GAME_CONFIG.SCREEN_MARGIN;
+      const reachedScreenStart = this.player.posX <= GAME_CONFIG.SCREEN_MARGIN;
 
-      if (notReachedLevelStart) {
-        if (notReachedScreenStart) {
-          this.player.move("left");
-        }
+      if (!reachedScreenStart) {
+        this.player.move("left");
+      }
+
+      if (reachedScreenStart && !reachedLevelStart) {
         this.level.move("left");
       }
     }
 
     if (this.keyboard.getKey("ArrowRight")) {
-      const notReachedLevelEnd =
-        this.level.posX - this.canvas2D.width > -this.level.width;
+      const reachedLevelEnd =
+        this.level.posX - this.canvas2D.width <= -this.level.width;
 
-      const notReachedScreenEnd =
-        this.player.posX + this.player.width <
+      const reachedScreenEnd =
+        this.player.posX + this.player.width >=
         this.canvas2D.width - GAME_CONFIG.SCREEN_MARGIN;
 
-      if (notReachedLevelEnd) {
-        if (notReachedScreenEnd) {
-          this.player.move("right");
-        }
+      if (!reachedScreenEnd) {
+        this.player.move("right");
+      }
+
+      if (reachedScreenEnd && !reachedLevelEnd) {
         this.level.move("right");
       }
     }
   }
 
-  private levelController(): void {}
+  private levelController(): void {
+    this.level.platforms.forEach((platform) => {
+      // console.log(platorm);
+    });
+  }
 }

@@ -2,6 +2,7 @@ import { GAME_CONFIG } from "../config";
 import Canvas2D from "../game/Canvas2D";
 import PLAYER_IMAGE from "../images/player.png";
 import Level from "../levels/Level";
+import { Vector } from "../types/Vector";
 import Character from "./Character";
 
 export default class Player extends Character {

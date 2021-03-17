@@ -4,11 +4,12 @@ import Renderable from "../game/Renderable";
 import BG_IMAGE from "../images/background.png";
 import { Subject } from "../interfaces/Subject";
 import { Observer } from "../interfaces/Observer";
+import Platform from "./Platform";
 
 export default class Level extends Renderable implements Subject {
   // Members
-  private pattern: CanvasPattern;
   public observers: Observer[] = [];
+  public platforms: Platform[] | null = [];
 
   // Constructor
   constructor(canvas2D: Canvas2D) {
@@ -24,14 +25,14 @@ export default class Level extends Renderable implements Subject {
     this.image.src = BG_IMAGE;
     this.image.onload = this.createPattern.bind(this);
 
-    // this.addPlatform(200, 400);
-    // this.addPlatform(600, 200);
-    // this.addPlatform(1000, 400);
+    this.generatePlatforms();
   }
 
   // Private methods
-  createPattern(): void {
-    this.pattern = this.canvas2D.ctx.createPattern(this.image, "repeat-x");
+  generatePlatforms(): void {
+    let platform = new Platform(this.canvas2D, 400, 400);
+    this.platforms.push(platform);
+    this.attach(platform);
   }
 
   // Public methods
@@ -59,15 +60,20 @@ export default class Level extends Renderable implements Subject {
   }
 
   public update(): void {
+    this.canvas2D.ctx.save();
+
     this.draw();
+    this.platforms.forEach((platform) => {
+      platform.update();
+    });
+
+    this.canvas2D.ctx.restore();
   }
 
   public draw(): void {
-    this.canvas2D.ctx.save();
     this.canvas2D.ctx.fillStyle = this.pattern;
     this.canvas2D.ctx.translate(this.pos.x, this.pos.y);
     this.canvas2D.ctx.fillRect(0, 0, this.size.width, this.size.height);
-    this.canvas2D.ctx.restore();
   }
 
   // Getter and setters

@@ -12,6 +12,8 @@ export default abstract class Renderable {
   protected size: Size;
   protected speed: number;
 
+  protected pattern: CanvasPattern;
+
   protected move(direction: string): void {}
 
   protected update(): void {}
@@ -24,5 +26,9 @@ export default abstract class Renderable {
       this.size.width,
       this.size.height
     );
+  }
+
+  protected createPattern(): void {
+    this.pattern = this.canvas2D.ctx.createPattern(this.image, "repeat-x");
   }
 }
