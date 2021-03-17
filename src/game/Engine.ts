@@ -28,38 +28,46 @@ export default class Engine {
   }
 
   // Private methods
+  private reachedLevelStart(): boolean {
+    return this.level.posX >= 0;
+  }
+
+  private reachedLevelEnd(): boolean {
+    return this.level.posX - this.canvas2D.width <= -this.level.width;
+  }
+
+  private reachedScreenStart(): boolean {
+    return this.player.posX <= GAME_CONFIG.SCREEN_MARGIN;
+  }
+
+  private reachedScreenEnd(): boolean {
+    return (
+      this.player.posX + this.player.width >=
+      this.canvas2D.width - GAME_CONFIG.SCREEN_MARGIN
+    );
+  }
+
   private keyboardController(): void {
     if (this.keyboard.getKey(" ") && this.player.isOnGround()) {
       this.player.jump();
     }
 
     if (this.keyboard.getKey("ArrowLeft")) {
-      const reachedLevelStart = this.level.posX >= 0;
-
-      const reachedScreenStart = this.player.posX <= GAME_CONFIG.SCREEN_MARGIN;
-
-      if (!reachedScreenStart) {
+      if (!this.reachedScreenStart()) {
         this.player.move("left");
       }
 
-      if (reachedScreenStart && !reachedLevelStart) {
+      if (this.reachedScreenStart() && !this.reachedLevelStart()) {
         this.level.move("left");
       }
     }
 
     if (this.keyboard.getKey("ArrowRight")) {
-      const reachedLevelEnd =
-        this.level.posX - this.canvas2D.width <= -this.level.width;
-
-      const reachedScreenEnd =
-        this.player.posX + this.player.width >=
-        this.canvas2D.width - GAME_CONFIG.SCREEN_MARGIN;
-
-      if (!reachedScreenEnd) {
+      if (!this.reachedScreenEnd()) {
         this.player.move("right");
       }
 
-      if (reachedScreenEnd && !reachedLevelEnd) {
+      if (this.reachedScreenEnd() && !this.reachedLevelEnd()) {
         this.level.move("right");
       }
     }
