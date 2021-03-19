@@ -86,10 +86,10 @@ export default class Engine {
     );
   }
 
-  private detectCollision(a: Player, b: any): boolean {
+  private detectCollision(a: Player, b: any, shiftX: number): boolean {
     return (
-      a.posX + a.width >= b.posX &&
-      a.posX <= b.posX + b.width &&
+      a.posX + a.width >= b.posX - shiftX &&
+      a.posX <= b.posX - shiftX + b.width &&
       a.posY + a.height >= b.posY &&
       a.posY <= b.posY + b.height
     );
@@ -97,7 +97,7 @@ export default class Engine {
 
   private collisionController(): void {
     this.level.platforms.forEach((platform) => {
-      if (this.detectCollision(this.player, platform)) {
+      if (this.detectCollision(this.player, platform, this.level.shiftX)) {
         if (this.player.isOnPlatform) return;
         if (this.isOnTop(this.player, platform)) {
           this.player.posY = platform.posY - this.player.height;

@@ -10,12 +10,14 @@ export default class Level extends Renderable implements Subject {
   // Members
   public observers: Observer[] = [];
   public platforms: Platform[] | null = [];
+  public shiftX: number;
 
   // Constructor
   constructor(canvas2D: Canvas2D) {
     super();
     this.canvas2D = canvas2D;
     this.pos = { x: 0, y: 0 };
+    this.shiftX = 0;
     this.speed = 10;
     this.size = {
       width: GAME_CONFIG.LEVEL_WIDTH,
@@ -45,6 +47,7 @@ export default class Level extends Renderable implements Subject {
         this.pos.x -= this.speed;
         break;
     }
+    this.shiftX = this.pos.x * -1;
   }
 
   public attach(observer: Observer): void {
