@@ -19,7 +19,6 @@ export default class Character extends Renderable implements Observer {
 
   // Public methods
   public update(): void {}
-
   public notify(any: any): void {}
 
   // Getters and setters
