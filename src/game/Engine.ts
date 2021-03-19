@@ -23,8 +23,8 @@ export default class Engine {
   }
 
   update(): void {
+    this.collisionController();
     this.keyboardController();
-    this.levelController();
   }
 
   // Private methods
@@ -48,7 +48,11 @@ export default class Engine {
   }
 
   private keyboardController(): void {
-    if (this.keyboard.getKey(" ") && this.player.isOnGround()) {
+    if (
+      this.keyboard.getKey(" ") &&
+      (this.player.isOnGround() || this.player.isOnTop)
+    ) {
+      this.player.isOnTop = null;
       this.player.jump();
     }
 
@@ -73,9 +77,37 @@ export default class Engine {
     }
   }
 
-  private levelController(): void {
+  private isOnTop(a: Player, b: any): boolean {
+    let margin = 20;
+
+    return (
+      (a.posY + a.height >= b.posY - margin &&
+        a.posY + a.height <= b.posY + margin) ||
+      a.posY + a.height === b.posY
+    );
+  }
+
+  private detectCollision(a: Player, b: any): boolean {
+    return (
+      a.posX + a.width >= b.posX &&
+      a.posX <= b.posX + b.width &&
+      a.posY + a.height >= b.posY &&
+      a.posY <= b.posY + b.height
+    );
+  }
+
+  private collisionController(): void {
     this.level.platforms.forEach((platform) => {
-      // console.log(platorm);
+      if (this.detectCollision(this.player, platform)) {
+        if (this.isOnTop(this.player, platform)) {
+          this.player.isOnTop = platform.posY - this.player.height;
+        } else {
+          this.player.isColliding = true;
+        }
+      } else {
+        this.player.isOnTop = null;
+        this.player.isColliding = false;
+      }
     });
   }
 }

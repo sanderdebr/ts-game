@@ -1,9 +1,9 @@
-import { Observer } from "./../interfaces/Observer";
-import Renderable from "../game/Renderable";
-import Canvas2D from "../game/Canvas2D";
 import { GAME_CONFIG } from "../config";
+import Canvas2D from "../game/Canvas2D";
+import Renderable from "../game/Renderable";
 import PLATFORM_IMAGE from "../images/grass.png";
 import { randomRangeInt } from "../utils";
+import { Observer } from "./../interfaces/Observer";
 
 export default class Platform extends Renderable implements Observer {
   // Constructor
@@ -15,7 +15,6 @@ export default class Platform extends Renderable implements Observer {
       height: GAME_CONFIG.PLATFORM_HEIGHT,
     };
     this.pos = { x, y };
-    console.log(this);
     this.image = new Image();
     this.image.src = PLATFORM_IMAGE;
     this.image.onload = this.createPattern.bind(this);

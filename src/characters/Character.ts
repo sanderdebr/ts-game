@@ -21,4 +21,29 @@ export default class Character extends Renderable implements Observer {
   public update(): void {}
 
   public notify(any: any): void {}
+
+  // Getters and setters
+  get getVelocityX(): number {
+    return this.velocityX;
+  }
+
+  set setVelocityX(x: number) {
+    this.velocityX = x;
+  }
+
+  get getVelocityY(): number {
+    return this.velocityY;
+  }
+
+  set setVelocityY(y: number) {
+    this.velocityY = y;
+  }
+
+  get getGravity(): number {
+    return this.gravity;
+  }
+
+  set setGravity(gravity: number) {
+    this.gravity = gravity;
+  }
 }

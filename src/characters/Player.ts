@@ -10,6 +10,9 @@ export default class Player extends Character {
   private jumpStrength: number;
   private groundLevel: number;
 
+  public isColliding: boolean;
+  public isOnTop: number;
+
   // Constructor
   constructor(canvas2D: Canvas2D) {
     super(canvas2D);
@@ -47,9 +50,20 @@ export default class Player extends Character {
   }
 
   private updatePosition(): void {
-    this.velocityY += this.gravity;
+    // Handle y position
+    if (this.isColliding) {
+      if (this.isOnTop) {
+        this.posY = this.isOnTop;
+        this.velocityY = 0;
+      } else {
+        this.velocityY = this.jumpStrength;
+      }
+    } else {
+      this.velocityY += this.gravity;
+    }
     this.pos.y += this.velocityY;
 
+    // Handle x position
     this.velocityX *= this.friction;
     this.pos.x += this.velocityX;
 
@@ -82,16 +96,12 @@ export default class Player extends Character {
     return this.pos.y >= this.groundLevel;
   }
 
-  // Getter and setters
-  get posX(): number {
-    return this.pos.x;
+  // Getters and setters
+  get getJumpStrength(): number {
+    return this.jumpStrength;
   }
 
-  set posX(x: number) {
-    this.pos.x = x;
-  }
-
-  get width(): number {
-    return this.size.width;
+  set setJumpStrength(jumpStrength: number) {
+    this.jumpStrength = jumpStrength;
   }
 }

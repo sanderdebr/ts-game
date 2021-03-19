@@ -75,13 +75,4 @@ export default class Level extends Renderable implements Subject {
     this.canvas2D.ctx.translate(this.pos.x, this.pos.y);
     this.canvas2D.ctx.fillRect(0, 0, this.size.width, this.size.height);
   }
-
-  // Getter and setters
-  get posX(): number {
-    return this.pos.x;
-  }
-
-  get width(): number {
-    return this.size.width;
-  }
 }

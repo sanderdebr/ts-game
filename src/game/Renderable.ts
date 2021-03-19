@@ -31,4 +31,29 @@ export default abstract class Renderable {
   protected createPattern(): void {
     this.pattern = this.canvas2D.ctx.createPattern(this.image, "repeat-x");
   }
+
+  // Getter and setters
+  get posX(): number {
+    return this.pos.x;
+  }
+
+  set posX(x: number) {
+    this.pos.x = x;
+  }
+
+  get posY(): number {
+    return this.pos.y;
+  }
+
+  set posY(y: number) {
+    this.pos.y = y;
+  }
+
+  get width(): number {
+    return this.size.width;
+  }
+
+  get height(): number {
+    return this.size.height;
+  }
 }
