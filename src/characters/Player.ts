@@ -11,7 +11,7 @@ export default class Player extends Character {
   private groundLevel: number;
 
   public isColliding: boolean;
-  public isOnTop: number;
+  public isOnPlatform: boolean;
 
   // Constructor
   constructor(canvas2D: Canvas2D) {
@@ -52,8 +52,7 @@ export default class Player extends Character {
   private updatePosition(): void {
     // Handle y position
     if (this.isColliding) {
-      if (this.isOnTop) {
-        this.posY = this.isOnTop;
+      if (this.isOnPlatform) {
         this.velocityY = 0;
       } else {
         this.velocityY = this.jumpStrength;

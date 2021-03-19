@@ -23,8 +23,8 @@ export default class Engine {
   }
 
   update(): void {
-    this.collisionController();
     this.keyboardController();
+    this.collisionController();
   }
 
   // Private methods
@@ -50,9 +50,8 @@ export default class Engine {
   private keyboardController(): void {
     if (
       this.keyboard.getKey(" ") &&
-      (this.player.isOnGround() || this.player.isOnTop)
+      (this.player.isOnGround() || this.player.isOnPlatform)
     ) {
-      this.player.isOnTop = null;
       this.player.jump();
     }
 
@@ -100,12 +99,12 @@ export default class Engine {
     this.level.platforms.forEach((platform) => {
       if (this.detectCollision(this.player, platform)) {
         if (this.isOnTop(this.player, platform)) {
-          this.player.isOnTop = platform.posY - this.player.height;
+          this.player.posY = platform.posY - this.player.height;
         } else {
+          this.player.isOnPlatform = false;
           this.player.isColliding = true;
         }
       } else {
-        this.player.isOnTop = null;
         this.player.isColliding = false;
       }
     });
