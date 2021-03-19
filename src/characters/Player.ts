@@ -2,7 +2,6 @@ import { GAME_CONFIG } from "../config";
 import Canvas2D from "../game/Canvas2D";
 import PLAYER_IMAGE from "../images/player.png";
 import Level from "../levels/Level";
-import { Vector } from "../types/Vector";
 import Character from "./Character";
 
 export default class Player extends Character {
@@ -17,10 +16,10 @@ export default class Player extends Character {
   constructor(canvas2D: Canvas2D) {
     super(canvas2D);
 
-    this.gravity = 1;
-    this.friction = 0.9;
-    this.speed = 10;
-    this.jumpStrength = 25;
+    this.gravity = GAME_CONFIG.GRAVITY;
+    this.friction = GAME_CONFIG.FRICTION;
+    this.speed = GAME_CONFIG.PLAYER_SPEED;
+    this.jumpStrength = GAME_CONFIG.PLAYER_JUMP_STRENGTH;
     this.size = {
       width: GAME_CONFIG.PLAYER_SIZE,
       height: GAME_CONFIG.PLAYER_SIZE,
@@ -51,27 +50,24 @@ export default class Player extends Character {
 
   private updatePosition(): void {
     // Handle y position
-    if (this.isColliding) {
-      if (this.isOnPlatform) {
-        this.velocityY = 0;
-      } else {
-        this.velocityY = this.jumpStrength;
-      }
+    if (this.isOnPlatform) {
+      this.velocityY = 0; // stay on platform
+    } else if (this.isColliding) {
+      this.velocityY = this.jumpStrength; // move down from platform
     } else {
-      this.velocityY += this.gravity;
+      this.velocityY += this.gravity; // regular gravity
     }
     this.pos.y += this.velocityY;
 
     // Handle x position
     this.velocityX *= this.friction;
     this.pos.x += this.velocityX;
-
-    this.pos.x += this.velocityX;
   }
 
   private stopFalling(): void {
     this.velocityY = 0;
     this.gravity = 0;
+    this.pos.y = this.groundLevel;
   }
 
   // Public methods

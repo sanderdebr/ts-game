@@ -9,6 +9,7 @@ export default class Engine {
   private player: Player;
   private keyboard: Keyboard;
   private level: Level;
+  private collisionMargin: number = 20;
 
   constructor(
     canvas2D: Canvas2D,
@@ -23,8 +24,8 @@ export default class Engine {
   }
 
   update(): void {
-    this.keyboardController();
     this.collisionController();
+    this.keyboardController();
   }
 
   // Private methods
@@ -52,6 +53,7 @@ export default class Engine {
       this.keyboard.getKey(" ") &&
       (this.player.isOnGround() || this.player.isOnPlatform)
     ) {
+      this.player.isOnPlatform = false;
       this.player.jump();
     }
 
@@ -77,11 +79,9 @@ export default class Engine {
   }
 
   private isOnTop(a: Player, b: any): boolean {
-    let margin = 20;
-
     return (
-      (a.posY + a.height >= b.posY - margin &&
-        a.posY + a.height <= b.posY + margin) ||
+      (a.posY + a.height >= b.posY - this.collisionMargin &&
+        a.posY + a.height <= b.posY + this.collisionMargin) ||
       a.posY + a.height === b.posY
     );
   }
@@ -98,14 +98,16 @@ export default class Engine {
   private collisionController(): void {
     this.level.platforms.forEach((platform) => {
       if (this.detectCollision(this.player, platform)) {
+        if (this.player.isOnPlatform) return;
         if (this.isOnTop(this.player, platform)) {
           this.player.posY = platform.posY - this.player.height;
+          this.player.isOnPlatform = true;
         } else {
-          this.player.isOnPlatform = false;
           this.player.isColliding = true;
         }
       } else {
         this.player.isColliding = false;
+        this.player.isOnPlatform = false;
       }
     });
   }
