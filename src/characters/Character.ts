@@ -11,11 +11,6 @@ export default class Character extends Renderable implements Observer {
   protected velocityY: number;
 
   // Constructor
-  protected constructor(canvas2D: Canvas2D) {
-    super();
-    this.canvas2D = canvas2D;
-    this.image = new Image();
-  }
 
   // Public methods
   public update(): void {}

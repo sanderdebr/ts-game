@@ -5,6 +5,7 @@ import BG_IMAGE from "../images/background.png";
 import { Subject } from "../interfaces/Subject";
 import { Observer } from "../interfaces/Observer";
 import Platform from "./Platform";
+import { imageLoader } from "../utils";
 
 export default class Level extends Renderable implements Subject {
   // Members
@@ -14,7 +15,7 @@ export default class Level extends Renderable implements Subject {
 
   // Constructor
   constructor(canvas2D: Canvas2D) {
-    super();
+    super(canvas2D);
     this.canvas2D = canvas2D;
     this.pos = { x: 0, y: 0 };
     this.shiftX = 0;
@@ -23,9 +24,12 @@ export default class Level extends Renderable implements Subject {
       width: GAME_CONFIG.LEVEL_WIDTH,
       height: this.canvas2D.height,
     };
-    this.image = new Image();
-    this.image.src = BG_IMAGE;
-    this.image.onload = this.createPattern.bind(this);
+
+    imageLoader(BG_IMAGE).then((image) => {
+      this.image = image;
+      this.createPattern();
+      this.loading = false;
+    });
 
     this.generatePlatforms();
   }

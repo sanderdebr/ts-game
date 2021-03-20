@@ -34,9 +34,15 @@ export default class Game {
   // Private methods
   private gameLoop(): void {
     this.canvas2D.update();
-    this.level.update();
     this.engine.update();
-    this.updateCharacters();
+
+    if (this.engine.gameState === "loading") {
+      this.canvas2D.showLoadingScreen();
+    } else if (this.engine.gameState === "ready") {
+      this.level.update();
+      this.updateCharacters();
+    }
+
     requestAnimationFrame(this.gameLoop.bind(this));
   }
 

@@ -5,18 +5,23 @@ import Level from "../levels/Level";
 import Canvas2D from "./Canvas2D";
 
 export default class Engine {
+  // Members
   private canvas2D: Canvas2D;
   private player: Player;
   private keyboard: Keyboard;
   private level: Level;
   private collisionMargin: number = 20;
 
+  public gameState: string;
+
+  // Constructor
   constructor(
     canvas2D: Canvas2D,
     player: Player,
     keyboard: Keyboard,
     level: Level
   ) {
+    this.gameState = "loading";
     this.canvas2D = canvas2D;
     this.player = player;
     this.keyboard = keyboard;
@@ -24,11 +29,31 @@ export default class Engine {
   }
 
   update(): void {
+    this.gameStateController();
     this.collisionController();
     this.keyboardController();
   }
 
-  // Private methods
+  /*
+    Game state controller
+  */
+  private everythingIsLoaded(): boolean {
+    return (
+      this.player.loading === false &&
+      this.level.loading === false &&
+      this.level.platforms.filter((platform) => platform.loading === true)
+        .length === 0
+    );
+  }
+  private gameStateController(): void {
+    if (this.everythingIsLoaded()) {
+      this.gameState = "ready";
+    }
+  }
+
+  /*
+    Keyboard controller
+  */
   private reachedLevelStart(): boolean {
     return this.level.posX >= 0;
   }
@@ -78,6 +103,9 @@ export default class Engine {
     }
   }
 
+  /*
+    Collision controller
+  */
   private isOnTop(a: Player, b: any): boolean {
     return (
       (a.posY + a.height >= b.posY - this.collisionMargin &&

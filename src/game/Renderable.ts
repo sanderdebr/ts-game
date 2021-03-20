@@ -7,12 +7,18 @@ export default abstract class Renderable {
   // protected is available on instances only
   protected canvas2D: Canvas2D;
   protected image: HTMLImageElement;
-
   protected pos: Vector;
   protected size: Size;
   protected speed: number;
-
   protected pattern: CanvasPattern;
+
+  public loading: boolean;
+
+  // Constructor
+  protected constructor(canvas2D: Canvas2D) {
+    this.canvas2D = canvas2D;
+    this.loading = true;
+  }
 
   protected move(direction: string): void {}
 

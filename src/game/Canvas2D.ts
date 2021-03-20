@@ -14,11 +14,11 @@ export default class Canvas2D {
   }
 
   // Private methods
-  private clear() {
+  private clear(): void {
     this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
   }
 
-  private drawBackground(backgroundColor: string) {
+  private drawBackground(backgroundColor: string): void {
     this.ctx.save();
     this.ctx.fillStyle = backgroundColor;
     this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
@@ -26,17 +26,22 @@ export default class Canvas2D {
   }
 
   // Public methods
-  public update() {
+  public update(): void {
     this.clear();
     this.drawBackground(GAME_CONFIG.BACKGROUND_COLOR);
   }
 
+  public showLoadingScreen(): void {
+    this.ctx.font = "60px Arial";
+    this.ctx.fillText("Loading", 400, 400);
+  }
+
   // Getters and settrs
-  get width() {
+  get width(): number {
     return this.canvas.width;
   }
 
-  get height() {
+  get height(): number {
     return this.canvas.height;
   }
 }
