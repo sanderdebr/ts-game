@@ -46,6 +46,7 @@ export default class Engine {
   private start(): void {
     this.level.generatePlatforms(LEVEL_BLUEPRINTS[this.player.level - 1]);
     this.level.generateMonsters(LEVEL_BLUEPRINTS[this.player.level - 1]);
+    this.level.generateCoins(LEVEL_BLUEPRINTS[this.player.level - 1]);
   }
 
   private updateCharacters(): void {
@@ -72,7 +73,8 @@ export default class Engine {
       this.level.platforms.filter((platform) => platform.loading === true)
         .length === 0 &&
       this.level.monsters.filter((monster) => monster.loading === true)
-        .length === 0
+        .length === 0 &&
+      this.level.coins.filter((coin) => coin.loading === true).length === 0
     );
   }
 
@@ -103,10 +105,6 @@ export default class Engine {
           this.player.coins,
           this.player.lives
         );
-
-        if (this.player.lives === 0) {
-          this.gameState = "lost";
-        }
 
         if (this.keyboard.getKey("Escape")) {
           this.gameState = "paused";
@@ -231,14 +229,29 @@ export default class Engine {
     // Monsters
     this.level.monsters.forEach((monster) => {
       if (this.detectCollision(this.player, monster, this.level.shiftX)) {
-        this.player.isColliding = true;
-        this.player.lives -= 1;
+        if (this.isOnTop(this.player, monster)) {
+          this.player.isHittingMonsterTop = true;
+        } else {
+          this.player.isColliding = true;
+        }
+        this.player.lives--;
       }
     });
+
+    // Coins
+    this.level.coins
+      .filter((coin) => coin.active)
+      .forEach((coin, i) => {
+        if (this.detectCollision(this.player, coin, this.level.shiftX)) {
+          this.player.coins++;
+          coin.active = false;
+        }
+      });
 
     if (this.isNotTouchingAnything()) {
       this.player.isColliding = false;
       this.player.isOnPlatform = null;
+      this.player.isHittingMonsterTop = false;
     }
   }
 }

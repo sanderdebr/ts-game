@@ -8,7 +8,7 @@ import Character from "./Character";
 
 export default class Monster extends Character {
   // Members
-  private bounceStrength: number;
+  private bounceSpeed: number;
   public isColliding: boolean;
   public startPos: Vector;
 
@@ -16,7 +16,7 @@ export default class Monster extends Character {
   constructor(canvas2D: Canvas2D, x: number, y: number) {
     super(canvas2D);
 
-    this.bounceStrength = 5;
+    this.bounceSpeed = 1;
     this.velocityX = 0;
     this.velocityY = -25;
 
@@ -42,19 +42,15 @@ export default class Monster extends Character {
     this.draw();
   }
 
-  public notify(level: Level): void {
-    console.log("notify");
-  }
-
   // Private methods
   private updatePosition(): void {
     // Handle y position
 
     if (this.pos.y < 100) {
-      this.velocityY = this.bounceStrength;
+      this.velocityY = this.bounceSpeed;
     }
     if (this.pos.y > this.startPos.y) {
-      this.velocityY = -this.bounceStrength;
+      this.velocityY = -this.bounceSpeed;
     }
 
     this.pos.y += this.velocityY;
@@ -79,6 +75,4 @@ export default class Monster extends Character {
         break;
     }
   }
-
-  // Getters and setters
 }

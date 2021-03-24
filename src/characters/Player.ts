@@ -17,6 +17,7 @@ export default class Player extends Character {
 
   public isColliding: boolean;
   public isOnPlatform: Platform;
+  public isHittingMonsterTop: boolean;
 
   // Constructor
   constructor(canvas2D: Canvas2D) {
@@ -73,6 +74,8 @@ export default class Player extends Character {
       this.velocityY = 0; // stay on platform
     } else if (this.isColliding) {
       this.velocityY = this.jumpStrength; // move down from platform
+    } else if (this.isHittingMonsterTop) {
+      this.jump();
     } else {
       this.velocityY += this.gravity; // regular gravity
     }

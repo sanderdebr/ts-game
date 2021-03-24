@@ -7,6 +7,7 @@ export const GAME_CONFIG: any = {
   LEVEL_WIDTH: 5000,
   PLAYER_SIZE: 80,
   MONSTER_SIZE: 80,
+  COIN_SIZE: 20,
   PLAYER_SPEED: 75,
   PLAYER_JUMP_STRENGTH: 25,
   PLATFORM_HEIGHT: 80,
@@ -25,6 +26,11 @@ export const LEVEL_BLUEPRINTS: any = [
       ],
       monsters: [
         { x: 250, y: 300 },
+        { x: 900, y: 200 },
+        { x: 1400, y: 300 },
+      ],
+      coins: [
+        { x: 400, y: 300 },
         { x: 900, y: 200 },
         { x: 1400, y: 300 },
       ],

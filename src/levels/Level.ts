@@ -7,12 +7,14 @@ import { Observer } from "../interfaces/Observer";
 import Platform from "./Platform";
 import { imageLoader } from "../utils";
 import Monster from "../characters/Monster";
+import Coin from "./Coin";
 
 export default class Level extends Renderable implements Subject {
   // Members
   public observers: Observer[] = [];
   public platforms: Platform[] | null = [];
   public monsters: Monster[] | null = [];
+  public coins: Coin[] | null = [];
   public shiftX: number;
 
   // Constructor
@@ -40,17 +42,25 @@ export default class Level extends Renderable implements Subject {
   // Public methods
   public generatePlatforms(blueprint: any): void {
     blueprint.outline.platforms.forEach(({ x, y, width }) => {
-      const newPlatform = new Platform(this.canvas2D, x, y, width);
-      this.platforms.push(newPlatform);
-      this.attach(newPlatform);
+      const platform = new Platform(this.canvas2D, x, y, width);
+      this.platforms.push(platform);
+      this.attach(platform);
     });
   }
 
   public generateMonsters(blueprint: any): void {
     blueprint.outline.monsters.forEach(({ x, y }) => {
-      const newMonster = new Monster(this.canvas2D, x, y);
-      this.monsters.push(newMonster);
-      this.attach(newMonster);
+      const monster = new Monster(this.canvas2D, x, y);
+      this.monsters.push(monster);
+      this.attach(monster);
+    });
+  }
+
+  public generateCoins(blueprint: any): void {
+    blueprint.outline.coins.forEach(({ x, y }) => {
+      const coin = new Coin(this.canvas2D, x, y);
+      this.coins.push(coin);
+      this.attach(coin);
     });
   }
 
@@ -89,6 +99,12 @@ export default class Level extends Renderable implements Subject {
     this.monsters.forEach((monster) => {
       monster.update();
     });
+
+    this.coins
+      .filter((coin) => coin.active)
+      .forEach((coin) => {
+        coin.update();
+      });
 
     this.canvas2D.ctx.restore();
   }
