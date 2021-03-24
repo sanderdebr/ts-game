@@ -43,7 +43,7 @@ export default class GUI extends Renderable {
         break;
       case "rightTop":
         x = this.canvas2D.width - 100;
-        y = 30;
+        y = 50 * n;
         break;
       case "leftTop":
         x = 30;
@@ -89,7 +89,9 @@ export default class GUI extends Renderable {
   }
 
   public showLostScreen(): void {
-    this.renderText("LOST", "black");
+    this.drawButton();
+    this.renderText("RESTART");
+    this.renderText("GAME OVER", "black", "leftTop");
   }
 
   public showFPS(fps: number): void {

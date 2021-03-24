@@ -39,11 +39,11 @@ export default class Engine {
     this.level = level;
     this.GUI = GUI;
 
-    this.start();
+    this.generateLevelObjects();
   }
 
   // Private methods
-  private start(): void {
+  private generateLevelObjects(): void {
     this.level.generatePlatforms(LEVEL_BLUEPRINTS[this.player.level - 1]);
     this.level.generateMonsters(LEVEL_BLUEPRINTS[this.player.level - 1]);
     this.level.generateCoins(LEVEL_BLUEPRINTS[this.player.level - 1]);
@@ -106,6 +106,10 @@ export default class Engine {
           this.player.lives
         );
 
+        if (this.player.lives === 0) {
+          this.gameState = "lost";
+        }
+
         if (this.keyboard.getKey("Escape")) {
           this.gameState = "paused";
         }
@@ -120,9 +124,22 @@ export default class Engine {
         }
         break;
       case "lost":
+        this.level.update();
+        this.updateCharacters();
         this.GUI.showLostScreen();
+
+        if (this.keyboard.getKey("Enter")) {
+          this.start();
+        }
         break;
     }
+  }
+
+  private start(): void {
+    this.player.start();
+    this.level.start();
+    this.generateLevelObjects();
+    this.gameState = "ready";
   }
 
   /*

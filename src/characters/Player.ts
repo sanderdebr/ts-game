@@ -57,17 +57,6 @@ export default class Player extends Character {
   }
 
   // Private methods
-  private start(): void {
-    this.level = 1;
-    this.coins = 0;
-    this.lives = 3;
-
-    this.velocityX = 0;
-    this.velocityY = 0;
-    this.pos = { x: 0, y: this.groundLevel };
-    this.isOnPlatform = null;
-  }
-
   private updatePosition(): void {
     // Handle y position
     if (this.isOnPlatform !== null) {
@@ -93,6 +82,17 @@ export default class Player extends Character {
   }
 
   // Public methods
+  public start(): void {
+    this.level = 1;
+    this.coins = 0;
+    this.lives = 3;
+
+    this.velocityX = 0;
+    this.velocityY = 0;
+    this.pos = { x: 0, y: this.groundLevel };
+    this.isOnPlatform = null;
+  }
+
   public jump(): void {
     this.velocityY = -this.jumpStrength;
     this.gravity = 1;

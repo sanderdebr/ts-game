@@ -11,10 +11,10 @@ import Coin from "./Coin";
 
 export default class Level extends Renderable implements Subject {
   // Members
-  public observers: Observer[] = [];
-  public platforms: Platform[] | null = [];
-  public monsters: Monster[] | null = [];
-  public coins: Coin[] | null = [];
+  public observers: Observer[];
+  public platforms: Platform[] | null;
+  public monsters: Monster[] | null;
+  public coins: Coin[] | null;
   public shiftX: number;
 
   // Constructor
@@ -22,8 +22,7 @@ export default class Level extends Renderable implements Subject {
     super(canvas2D);
 
     this.canvas2D = canvas2D;
-    this.pos = { x: 0, y: 0 };
-    this.shiftX = 0;
+
     this.speed = 10;
     this.size = {
       width: GAME_CONFIG.LEVEL_WIDTH,
@@ -35,11 +34,20 @@ export default class Level extends Renderable implements Subject {
       this.createPattern();
       this.loading = false;
     });
+
+    this.start();
   }
 
-  // Private methods
-
   // Public methods
+  public start(): void {
+    this.observers = [];
+    this.platforms = [];
+    this.monsters = [];
+    this.coins = [];
+    this.pos = { x: 0, y: 0 };
+    this.shiftX = 0;
+  }
+
   public generatePlatforms(blueprint: any): void {
     blueprint.outline.platforms.forEach(({ x, y, width }) => {
       const platform = new Platform(this.canvas2D, x, y, width);
