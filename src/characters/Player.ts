@@ -36,9 +36,13 @@ export default class Player extends Character {
   }
 
   // Public methods
-  public update(): void {
-    this.updatePosition();
-    if (this.isOnGround()) this.stopFalling();
+  public update(gameState: string): void {
+    if (gameState === "running") {
+      this.updatePosition();
+    }
+    if (this.isOnGround()) {
+      this.stopFalling();
+    }
     this.draw();
   }
 
@@ -85,10 +89,14 @@ export default class Player extends Character {
   public move(direction: string): void {
     switch (direction) {
       case "left":
-        if (this.velocityX > -this.speed) this.velocityX--;
+        if (this.velocityX > -this.speed) {
+          this.velocityX--;
+        }
         break;
       case "right":
-        if (this.velocityX < this.speed) this.velocityX++;
+        if (this.velocityX < this.speed) {
+          this.velocityX++;
+        }
         break;
     }
   }

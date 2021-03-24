@@ -31,7 +31,7 @@ export default class Engine {
   update(): void {
     this.gameStateController();
     this.collisionController();
-    this.keyboardController();
+    this.playerMovementController();
   }
 
   /*
@@ -46,21 +46,25 @@ export default class Engine {
         .length === 0
     );
   }
+
   private gameStateController(): void {
     if (this.gameState === "loading" && this.everythingIsLoaded()) {
       this.gameState = "ready";
     }
-    if (this.gameState === "ready") {
-      this.keyboard.setActive(true);
-      // this.gameState = "running";
+    if (this.gameState === "ready" || this.gameState === "paused") {
+      if (this.keyboard.getKey("Enter")) {
+        this.gameState = "running";
+      }
     }
     if (this.gameState === "running") {
-      //
+      if (this.keyboard.getKey("Escape")) {
+        this.gameState = "paused";
+      }
     }
   }
 
   /*
-    Keyboard controller
+    Player movement controller
   */
 
   private reachedLevelStart(): boolean {
@@ -82,7 +86,11 @@ export default class Engine {
     );
   }
 
-  private keyboardController(): void {
+  private playerMovementController(): void {
+    if (this.gameState !== "running") {
+      return;
+    }
+
     if (
       this.keyboard.getKey(" ") &&
       (this.player.isOnGround() || this.player.isOnPlatform)

@@ -13,7 +13,7 @@ export default class Character extends Renderable implements Observer {
   // Constructor
 
   // Public methods
-  public update(): void {}
+  public update(gameState: string): void {}
   public notify(any: any): void {}
 
   // Getters and setters

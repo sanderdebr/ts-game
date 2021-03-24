@@ -22,7 +22,7 @@ export default abstract class Renderable {
 
   protected move(direction: string): void {}
 
-  protected update(): void {}
+  protected update(gameState: string): void {}
 
   protected draw(): void {
     this.canvas2D.ctx.drawImage(
