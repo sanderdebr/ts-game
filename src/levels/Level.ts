@@ -1,4 +1,4 @@
-import { GAME_CONFIG } from "../config";
+import { GAME_CONFIG, LEVEL_BLUEPRINTS } from "../config";
 import Canvas2D from "../game/Canvas2D";
 import Renderable from "../game/Renderable";
 import BG_IMAGE from "../images/background.png";
@@ -6,7 +6,6 @@ import { Subject } from "../interfaces/Subject";
 import { Observer } from "../interfaces/Observer";
 import Platform from "./Platform";
 import { imageLoader } from "../utils";
-import { LEVEL_BLUEPRINTS } from "./level-blueprints";
 
 export default class Level extends Renderable implements Subject {
   // Members

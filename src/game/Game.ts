@@ -4,11 +4,13 @@ import Keyboard from "../input/Keyboard";
 import Level from "../levels/Level";
 import Canvas2D from "./Canvas2D";
 import Engine from "./Engine";
+import GUI from "./GUI";
 
 export default class Game {
   // Members
   private static instance: Game;
   private canvas2D: Canvas2D;
+  private GUI: GUI;
   private player: Player;
   private keyboard: Keyboard;
   private level: Level;
@@ -18,6 +20,7 @@ export default class Game {
   // Constructor
   private constructor() {
     this.canvas2D = new Canvas2D();
+    this.GUI = new GUI(this.canvas2D);
     this.player = new Player(this.canvas2D);
     this.keyboard = new Keyboard();
     this.level = new Level(this.canvas2D);
@@ -38,12 +41,12 @@ export default class Game {
 
     switch (this.engine.gameState) {
       case "loading":
-        this.canvas2D.showLoadingScreen();
+        this.GUI.showLoadingScreen();
         break;
       case "ready":
         this.level.update();
         this.updateCharacters();
-        this.canvas2D.showStartScreen();
+        this.GUI.showStartScreen();
         break;
       case "running":
         this.level.update();

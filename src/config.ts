@@ -1,10 +1,9 @@
 export const GAME_CONFIG: any = {
   SCREEN_MARGIN: 200,
   BACKGROUND_COLOR: "#FFF",
-  FONT: "40px sans-serif",
-  TEXT_COLOR: "#FFF",
-  BUTTON_WIDTH: 160,
-  BUTTON_HEIGHT: 80,
+  FONT: "30px sans-serif",
+  BUTTON_WIDTH: 250,
+  BUTTON_HEIGHT: 65,
   LEVEL_WIDTH: 5000,
   PLAYER_SIZE: 80,
   PLAYER_SPEED: 75,
@@ -13,3 +12,16 @@ export const GAME_CONFIG: any = {
   GRAVITY: 1,
   FRICTION: 0.9,
 };
+
+export const LEVEL_BLUEPRINTS: any = [
+  {
+    level: 1,
+    outline: {
+      platforms: [
+        { x: 300, y: 400, width: 400 },
+        { x: 800, y: 300, width: 300 },
+        { x: 1200, y: 400, width: 500 },
+      ],
+    },
+  },
+];
