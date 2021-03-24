@@ -7,11 +7,11 @@ import { Observer } from "./../interfaces/Observer";
 
 export default class Platform extends Renderable implements Observer {
   // Constructor
-  constructor(canvas2D: Canvas2D, x: number, y: number) {
+  constructor(canvas2D: Canvas2D, x: number, y: number, width: number) {
     super(canvas2D);
     this.canvas2D = canvas2D;
     this.size = {
-      width: randomRangeInt(400, 600),
+      width,
       height: GAME_CONFIG.PLATFORM_HEIGHT,
     };
     this.pos = { x, y };

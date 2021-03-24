@@ -36,11 +36,19 @@ export default class Game {
     this.canvas2D.update();
     this.engine.update();
 
-    if (this.engine.gameState === "loading") {
-      this.canvas2D.showLoadingScreen();
-    } else if (this.engine.gameState === "ready") {
-      this.level.update();
-      this.updateCharacters();
+    switch (this.engine.gameState) {
+      case "loading":
+        this.canvas2D.showLoadingScreen();
+        break;
+      case "ready":
+        this.level.update();
+        this.updateCharacters();
+        this.canvas2D.showStartScreen();
+        break;
+      case "running":
+        this.level.update();
+        this.updateCharacters();
+        break;
     }
 
     requestAnimationFrame(this.gameLoop.bind(this));

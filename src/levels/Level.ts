@@ -37,8 +37,8 @@ export default class Level extends Renderable implements Subject {
 
   // Private methods
   private generatePlatforms(blueprint: any): void {
-    blueprint.outline.platforms.forEach(({ x, y }) => {
-      const newPlatform = new Platform(this.canvas2D, x, y);
+    blueprint.outline.platforms.forEach(({ x, y, width }) => {
+      const newPlatform = new Platform(this.canvas2D, x, y, width);
       this.platforms.push(newPlatform);
       this.attach(newPlatform);
     });

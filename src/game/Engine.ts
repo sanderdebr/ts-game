@@ -47,8 +47,15 @@ export default class Engine {
     );
   }
   private gameStateController(): void {
-    if (this.everythingIsLoaded()) {
+    if (this.gameState === "loading" && this.everythingIsLoaded()) {
       this.gameState = "ready";
+    }
+    if (this.gameState === "ready") {
+      this.keyboard.setActive(true);
+      // this.gameState = "running";
+    }
+    if (this.gameState === "running") {
+      //
     }
   }
 
@@ -126,6 +133,14 @@ export default class Engine {
     );
   }
 
+  private isNotTouchingAnyPlatform(): boolean {
+    return (
+      this.level.platforms.filter((platform) =>
+        this.detectCollision(this.player, platform, this.level.shiftX)
+      ).length === 0
+    );
+  }
+
   private collisionController(): void {
     this.level.platforms.forEach((platform) => {
       if (this.detectCollision(this.player, platform, this.level.shiftX)) {
@@ -133,20 +148,15 @@ export default class Engine {
         if (this.isOnTop(this.player, platform)) {
           this.player.posY = platform.posY - this.player.height;
           this.player.isOnPlatform = platform;
-          console.log("player is on platform set to platform");
         } else {
           this.player.isColliding = true;
         }
       }
-
-      if (
-        this.level.platforms.filter((platform) =>
-          this.detectCollision(this.player, platform, this.level.shiftX)
-        ).length === 0
-      ) {
-        this.player.isColliding = false;
-        this.player.isOnPlatform = null;
-      }
     });
+
+    if (this.isNotTouchingAnyPlatform()) {
+      this.player.isColliding = false;
+      this.player.isOnPlatform = null;
+    }
   }
 }
