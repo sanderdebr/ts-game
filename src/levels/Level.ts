@@ -6,16 +6,19 @@ import { Subject } from "../interfaces/Subject";
 import { Observer } from "../interfaces/Observer";
 import Platform from "./Platform";
 import { imageLoader } from "../utils";
+import Monster from "../characters/Monster";
 
 export default class Level extends Renderable implements Subject {
   // Members
   public observers: Observer[] = [];
   public platforms: Platform[] | null = [];
+  public monsters: Monster[] | null = [];
   public shiftX: number;
 
   // Constructor
   constructor(canvas2D: Canvas2D) {
     super(canvas2D);
+
     this.canvas2D = canvas2D;
     this.pos = { x: 0, y: 0 };
     this.shiftX = 0;
@@ -30,12 +33,12 @@ export default class Level extends Renderable implements Subject {
       this.createPattern();
       this.loading = false;
     });
-
-    this.generatePlatforms(LEVEL_BLUEPRINTS[0]);
   }
 
   // Private methods
-  private generatePlatforms(blueprint: any): void {
+
+  // Public methods
+  public generatePlatforms(blueprint: any): void {
     blueprint.outline.platforms.forEach(({ x, y, width }) => {
       const newPlatform = new Platform(this.canvas2D, x, y, width);
       this.platforms.push(newPlatform);
@@ -43,7 +46,14 @@ export default class Level extends Renderable implements Subject {
     });
   }
 
-  // Public methods
+  public generateMonsters(blueprint: any): void {
+    blueprint.outline.monsters.forEach(({ x, y }) => {
+      const newMonster = new Monster(this.canvas2D, x, y);
+      this.monsters.push(newMonster);
+      this.attach(newMonster);
+    });
+  }
+
   public move(direction: string): void {
     switch (direction) {
       case "left":
@@ -70,10 +80,14 @@ export default class Level extends Renderable implements Subject {
 
   public update(): void {
     this.canvas2D.ctx.save();
-
     this.draw();
+
     this.platforms.forEach((platform) => {
       platform.update();
+    });
+
+    this.monsters.forEach((monster) => {
+      monster.update();
     });
 
     this.canvas2D.ctx.restore();

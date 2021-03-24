@@ -10,6 +10,11 @@ export default class Player extends Character {
   // Members
   private jumpStrength: number;
   private groundLevel: number;
+
+  public coins: number;
+  public level: number;
+  public lives: number;
+
   public isColliding: boolean;
   public isOnPlatform: Platform;
 
@@ -52,6 +57,10 @@ export default class Player extends Character {
 
   // Private methods
   private start(): void {
+    this.level = 1;
+    this.coins = 0;
+    this.lives = 3;
+
     this.velocityX = 0;
     this.velocityY = 0;
     this.pos = { x: 0, y: this.groundLevel };

@@ -88,13 +88,17 @@ export default class GUI extends Renderable {
     this.renderText("PAUSED");
   }
 
+  public showLostScreen(): void {
+    this.renderText("LOST", "black");
+  }
+
   public showFPS(fps: number): void {
     this.renderText(`${fps}fps`, "black", "rightTop");
   }
 
-  public showPlayerStats(): void {
-    this.renderText(`Level: 1`, "black", "leftTop", 1);
-    this.renderText(`Coins: 0`, "black", "leftTop", 2);
-    this.renderText(`Lives: 3`, "black", "leftTop", 3);
+  public showPlayerStats(level: number, coins: number, lives: number): void {
+    this.renderText(`Level: ${level}`, "black", "leftTop", 1);
+    this.renderText(`Coins: ${coins}`, "black", "leftTop", 2);
+    this.renderText(`Lives: ${lives}`, "black", "leftTop", 3);
   }
 }

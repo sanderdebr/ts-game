@@ -1,6 +1,6 @@
 import Character from "../characters/Character";
 import Player from "../characters/Player";
-import { GAME_CONFIG } from "../config";
+import { GAME_CONFIG, LEVEL_BLUEPRINTS } from "../config";
 import GUI from "../GUI/GUI";
 import Keyboard from "../input/Keyboard";
 import Level from "../levels/Level";
@@ -38,9 +38,16 @@ export default class Engine {
     this.keyboard = keyboard;
     this.level = level;
     this.GUI = GUI;
+
+    this.start();
   }
 
   // Private methods
+  private start(): void {
+    this.level.generatePlatforms(LEVEL_BLUEPRINTS[this.player.level - 1]);
+    this.level.generateMonsters(LEVEL_BLUEPRINTS[this.player.level - 1]);
+  }
+
   private updateCharacters(): void {
     this.characters.forEach((character) => {
       character.update(this.gameState);
@@ -63,6 +70,8 @@ export default class Engine {
       this.player.loading === false &&
       this.level.loading === false &&
       this.level.platforms.filter((platform) => platform.loading === true)
+        .length === 0 &&
+      this.level.monsters.filter((monster) => monster.loading === true)
         .length === 0
     );
   }
@@ -89,7 +98,15 @@ export default class Engine {
         this.level.update();
         this.updateCharacters();
         this.GUI.showFPS(this.fps);
-        this.GUI.showPlayerStats();
+        this.GUI.showPlayerStats(
+          this.player.level,
+          this.player.coins,
+          this.player.lives
+        );
+
+        if (this.player.lives === 0) {
+          this.gameState = "lost";
+        }
 
         if (this.keyboard.getKey("Escape")) {
           this.gameState = "paused";
@@ -103,6 +120,9 @@ export default class Engine {
         if (this.keyboard.getKey("Enter")) {
           this.gameState = "running";
         }
+        break;
+      case "lost":
+        this.GUI.showLostScreen();
         break;
     }
   }
@@ -183,15 +203,19 @@ export default class Engine {
     );
   }
 
-  private isNotTouchingAnyPlatform(): boolean {
+  private isNotTouchingAnything(): boolean {
     return (
       this.level.platforms.filter((platform) =>
         this.detectCollision(this.player, platform, this.level.shiftX)
+      ).length === 0 &&
+      this.level.monsters.filter((monster) =>
+        this.detectCollision(this.player, monster, this.level.shiftX)
       ).length === 0
     );
   }
 
   private collisionController(): void {
+    // Platforms
     this.level.platforms.forEach((platform) => {
       if (this.detectCollision(this.player, platform, this.level.shiftX)) {
         if (this.player.isOnPlatform === platform) return;
@@ -204,7 +228,15 @@ export default class Engine {
       }
     });
 
-    if (this.isNotTouchingAnyPlatform()) {
+    // Monsters
+    this.level.monsters.forEach((monster) => {
+      if (this.detectCollision(this.player, monster, this.level.shiftX)) {
+        this.player.isColliding = true;
+        this.player.lives -= 1;
+      }
+    });
+
+    if (this.isNotTouchingAnything()) {
       this.player.isColliding = false;
       this.player.isOnPlatform = null;
     }
