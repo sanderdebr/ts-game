@@ -1,34 +1,63 @@
+import Character from "../characters/Character";
 import Player from "../characters/Player";
 import { GAME_CONFIG } from "../config";
+import GUI from "../GUI/GUI";
 import Keyboard from "../input/Keyboard";
 import Level from "../levels/Level";
 import Canvas2D from "./Canvas2D";
 
 export default class Engine {
   // Members
+  public gameState: string;
   private canvas2D: Canvas2D;
   private player: Player;
   private keyboard: Keyboard;
   private level: Level;
-  private collisionMargin: number = 20;
+  private GUI: GUI;
+  private characters: Map<string, Character>;
 
-  public gameState: string;
+  private frames: number[] = [];
+  private fps: number;
+
+  private collisionMargin: number = 20;
 
   // Constructor
   constructor(
+    characters: Map<string, Character>,
     canvas2D: Canvas2D,
     player: Player,
     keyboard: Keyboard,
-    level: Level
+    level: Level,
+    GUI: GUI
   ) {
     this.gameState = "loading";
+    this.characters = characters;
     this.canvas2D = canvas2D;
     this.player = player;
     this.keyboard = keyboard;
     this.level = level;
+    this.GUI = GUI;
   }
 
-  update(): void {
+  // Private methods
+  private calculateFPS(): void {
+    const now = performance.now();
+    while (this.frames.length > 0 && this.frames[0] <= now - 1000) {
+      this.frames.shift();
+    }
+    this.frames.push(now);
+    this.fps = this.frames.length;
+  }
+
+  private updateCharacters(): void {
+    this.characters.forEach((character) => {
+      character.update(this.gameState);
+    });
+  }
+
+  // Public methods
+  public update(): void {
+    this.calculateFPS();
     this.gameStateController();
     this.collisionController();
     this.playerMovementController();
@@ -37,7 +66,6 @@ export default class Engine {
   /*
     Game state controller
   */
-
   private everythingIsLoaded(): boolean {
     return (
       this.player.loading === false &&
@@ -48,25 +76,48 @@ export default class Engine {
   }
 
   private gameStateController(): void {
-    if (this.gameState === "loading" && this.everythingIsLoaded()) {
-      this.gameState = "ready";
-    }
-    if (this.gameState === "ready" || this.gameState === "paused") {
-      if (this.keyboard.getKey("Enter")) {
-        this.gameState = "running";
-      }
-    }
-    if (this.gameState === "running") {
-      if (this.keyboard.getKey("Escape")) {
-        this.gameState = "paused";
-      }
+    switch (this.gameState) {
+      case "loading":
+        this.GUI.showLoadingScreen();
+
+        if (this.everythingIsLoaded()) {
+          this.gameState = "ready";
+        }
+        break;
+      case "ready":
+        this.level.update();
+        this.updateCharacters();
+        this.GUI.showStartScreen();
+
+        if (this.keyboard.getKey("Enter")) {
+          this.gameState = "running";
+        }
+        break;
+      case "running":
+        this.level.update();
+        this.updateCharacters();
+        this.GUI.showFPS(this.fps);
+        this.GUI.showPlayerStats();
+
+        if (this.keyboard.getKey("Escape")) {
+          this.gameState = "paused";
+        }
+        break;
+      case "paused":
+        this.level.update();
+        this.updateCharacters();
+        this.GUI.showPausedScreen();
+
+        if (this.keyboard.getKey("Enter")) {
+          this.gameState = "running";
+        }
+        break;
     }
   }
 
   /*
     Player movement controller
   */
-
   private reachedLevelStart(): boolean {
     return this.level.posX >= 0;
   }
@@ -123,7 +174,6 @@ export default class Engine {
   /*
     Collision controller
   */
-
   private isOnTop(a: Player, b: any): boolean {
     return (
       (a.posY + a.height >= b.posY - this.collisionMargin &&

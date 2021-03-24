@@ -49,7 +49,16 @@ export default class GUI extends Renderable {
     this.canvas2D.ctx.fillText(text, x, y);
   }
 
-  private drawButton(): void {
+  private drawButton(position: string = "center"): void {
+    switch (position) {
+      case "center":
+        (this.buttonPos.x =
+          this.canvas2D.width / 2 - GAME_CONFIG.BUTTON_WIDTH / 2),
+          (this.buttonPos.y =
+            this.canvas2D.height / 2 - GAME_CONFIG.BUTTON_HEIGHT / 1.5);
+        break;
+    }
+
     this.canvas2D.ctx.drawImage(
       this.image,
       this.buttonPos.x,
@@ -66,15 +75,17 @@ export default class GUI extends Renderable {
 
   public showStartScreen(): void {
     this.drawButton();
-    this.renderText("PRESS ENTER", "white");
+    this.renderText("PRESS ENTER");
   }
 
   public showPausedScreen(): void {
     this.drawButton();
-    this.renderText("PAUSED", "white");
+    this.renderText("PAUSED");
   }
 
-  public showFPS(fps): void {
+  public showFPS(fps: number): void {
     this.renderText(`${fps}fps`, "black", "rightTop");
   }
+
+  public showPlayerStats(): void {}
 }

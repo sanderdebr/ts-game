@@ -16,8 +16,6 @@ export default class Game {
   private level: Level;
   private engine: Engine;
   private characters: Map<string, Character> = new Map();
-  private frames: number[] = [];
-  private fps: number;
 
   // Constructor
   private constructor() {
@@ -29,10 +27,12 @@ export default class Game {
     this.GUI = new GUI(this.canvas2D);
 
     this.engine = new Engine(
+      this.characters,
       this.canvas2D,
       this.player,
       this.keyboard,
-      this.level
+      this.level,
+      this.GUI
     );
 
     this.gameLoop();
@@ -40,48 +40,10 @@ export default class Game {
 
   // Private methods
   private gameLoop(): void {
-    this.calculateFPS();
-
     this.canvas2D.update();
     this.engine.update();
 
-    switch (this.engine.gameState) {
-      case "loading":
-        this.GUI.showLoadingScreen();
-        break;
-      case "ready":
-        this.level.update();
-        this.updateCharacters();
-        this.GUI.showStartScreen();
-        break;
-      case "running":
-        this.level.update();
-        this.updateCharacters();
-        this.GUI.showFPS(this.fps);
-        break;
-      case "paused":
-        this.level.update();
-        this.updateCharacters();
-        this.GUI.showPausedScreen();
-        break;
-    }
-
     requestAnimationFrame(this.gameLoop.bind(this));
-  }
-
-  private calculateFPS(): void {
-    const now = performance.now();
-    while (this.frames.length > 0 && this.frames[0] <= now - 1000) {
-      this.frames.shift();
-    }
-    this.frames.push(now);
-    this.fps = this.frames.length;
-  }
-
-  private updateCharacters(): void {
-    this.characters.forEach((character) => {
-      character.update(this.engine.gameState);
-    });
   }
 
   // Public methods
