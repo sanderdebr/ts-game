@@ -6,6 +6,7 @@ import { Subject } from "../interfaces/Subject";
 import { Observer } from "../interfaces/Observer";
 import Platform from "./Platform";
 import { imageLoader } from "../utils";
+import { LEVEL_BLUEPRINTS } from "./level-blueprints";
 
 export default class Level extends Renderable implements Subject {
   // Members
@@ -31,14 +32,16 @@ export default class Level extends Renderable implements Subject {
       this.loading = false;
     });
 
-    this.generatePlatforms();
+    this.generatePlatforms(LEVEL_BLUEPRINTS[0]);
   }
 
   // Private methods
-  generatePlatforms(): void {
-    let platform = new Platform(this.canvas2D, 400, 400);
-    this.platforms.push(platform);
-    this.attach(platform);
+  private generatePlatforms(blueprint: any): void {
+    blueprint.outline.platforms.forEach(({ x, y }) => {
+      const newPlatform = new Platform(this.canvas2D, x, y);
+      this.platforms.push(newPlatform);
+      this.attach(newPlatform);
+    });
   }
 
   // Public methods

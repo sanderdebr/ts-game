@@ -33,7 +33,7 @@ export default class Canvas2D {
 
   public showLoadingScreen(): void {
     this.ctx.font = "60px Arial";
-    this.ctx.fillText("Loading", 400, 400);
+    this.ctx.fillText("Loading", 400, 300);
   }
 
   // Getters and settrs

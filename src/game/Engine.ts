@@ -37,6 +37,7 @@ export default class Engine {
   /*
     Game state controller
   */
+
   private everythingIsLoaded(): boolean {
     return (
       this.player.loading === false &&
@@ -54,6 +55,7 @@ export default class Engine {
   /*
     Keyboard controller
   */
+
   private reachedLevelStart(): boolean {
     return this.level.posX >= 0;
   }
@@ -78,7 +80,7 @@ export default class Engine {
       this.keyboard.getKey(" ") &&
       (this.player.isOnGround() || this.player.isOnPlatform)
     ) {
-      this.player.isOnPlatform = false;
+      this.player.isOnPlatform = null;
       this.player.jump();
     }
 
@@ -106,6 +108,7 @@ export default class Engine {
   /*
     Collision controller
   */
+
   private isOnTop(a: Player, b: any): boolean {
     return (
       (a.posY + a.height >= b.posY - this.collisionMargin &&
@@ -126,16 +129,23 @@ export default class Engine {
   private collisionController(): void {
     this.level.platforms.forEach((platform) => {
       if (this.detectCollision(this.player, platform, this.level.shiftX)) {
-        if (this.player.isOnPlatform) return;
+        if (this.player.isOnPlatform === platform) return;
         if (this.isOnTop(this.player, platform)) {
           this.player.posY = platform.posY - this.player.height;
-          this.player.isOnPlatform = true;
+          this.player.isOnPlatform = platform;
+          console.log("player is on platform set to platform");
         } else {
           this.player.isColliding = true;
         }
-      } else {
+      }
+
+      if (
+        this.level.platforms.filter((platform) =>
+          this.detectCollision(this.player, platform, this.level.shiftX)
+        ).length === 0
+      ) {
         this.player.isColliding = false;
-        this.player.isOnPlatform = false;
+        this.player.isOnPlatform = null;
       }
     });
   }

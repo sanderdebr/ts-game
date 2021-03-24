@@ -2,6 +2,7 @@ import { GAME_CONFIG } from "../config";
 import Canvas2D from "../game/Canvas2D";
 import PLAYER_IMAGE from "../images/player.png";
 import Level from "../levels/Level";
+import Platform from "../levels/Platform";
 import { imageLoader } from "../utils";
 import Character from "./Character";
 
@@ -10,7 +11,7 @@ export default class Player extends Character {
   private jumpStrength: number;
   private groundLevel: number;
   public isColliding: boolean;
-  public isOnPlatform: boolean;
+  public isOnPlatform: Platform;
 
   // Constructor
   constructor(canvas2D: Canvas2D) {
@@ -50,11 +51,12 @@ export default class Player extends Character {
     this.velocityX = 0;
     this.velocityY = 0;
     this.pos = { x: 0, y: this.groundLevel };
+    this.isOnPlatform = null;
   }
 
   private updatePosition(): void {
     // Handle y position
-    if (this.isOnPlatform) {
+    if (this.isOnPlatform !== null) {
       this.velocityY = 0; // stay on platform
     } else if (this.isColliding) {
       this.velocityY = this.jumpStrength; // move down from platform
