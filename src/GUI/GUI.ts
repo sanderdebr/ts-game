@@ -27,7 +27,8 @@ export default class GUI extends Renderable {
   private renderText(
     text: string,
     color: string = "white",
-    position: string = "center"
+    position: string = "center",
+    n: number = 1
   ): void {
     const textWidth = this.canvas2D.ctx.measureText(text).width;
     this.canvas2D.ctx.font = GAME_CONFIG.FONT;
@@ -42,7 +43,11 @@ export default class GUI extends Renderable {
         break;
       case "rightTop":
         x = this.canvas2D.width - 100;
-        y = 50;
+        y = 30;
+        break;
+      case "leftTop":
+        x = 30;
+        y = 50 * n;
         break;
     }
 
@@ -87,5 +92,9 @@ export default class GUI extends Renderable {
     this.renderText(`${fps}fps`, "black", "rightTop");
   }
 
-  public showPlayerStats(): void {}
+  public showPlayerStats(): void {
+    this.renderText(`Level: 1`, "black", "leftTop", 1);
+    this.renderText(`Coins: 0`, "black", "leftTop", 2);
+    this.renderText(`Lives: 3`, "black", "leftTop", 3);
+  }
 }

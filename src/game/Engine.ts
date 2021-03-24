@@ -4,6 +4,7 @@ import { GAME_CONFIG } from "../config";
 import GUI from "../GUI/GUI";
 import Keyboard from "../input/Keyboard";
 import Level from "../levels/Level";
+import { calculateFPS } from "../utils";
 import Canvas2D from "./Canvas2D";
 
 export default class Engine {
@@ -40,15 +41,6 @@ export default class Engine {
   }
 
   // Private methods
-  private calculateFPS(): void {
-    const now = performance.now();
-    while (this.frames.length > 0 && this.frames[0] <= now - 1000) {
-      this.frames.shift();
-    }
-    this.frames.push(now);
-    this.fps = this.frames.length;
-  }
-
   private updateCharacters(): void {
     this.characters.forEach((character) => {
       character.update(this.gameState);
@@ -57,7 +49,7 @@ export default class Engine {
 
   // Public methods
   public update(): void {
-    this.calculateFPS();
+    calculateFPS.call(this);
     this.gameStateController();
     this.collisionController();
     this.playerMovementController();
@@ -66,7 +58,7 @@ export default class Engine {
   /*
     Game state controller
   */
-  private everythingIsLoaded(): boolean {
+  private allRenderablesAreLoaded(): boolean {
     return (
       this.player.loading === false &&
       this.level.loading === false &&
@@ -80,7 +72,7 @@ export default class Engine {
       case "loading":
         this.GUI.showLoadingScreen();
 
-        if (this.everythingIsLoaded()) {
+        if (this.allRenderablesAreLoaded()) {
           this.gameState = "ready";
         }
         break;

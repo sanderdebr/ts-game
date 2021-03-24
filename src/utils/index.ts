@@ -1,3 +1,5 @@
+import Player from "../characters/Player";
+
 // Generate random number between x and y
 export function randomRangeInt(min: number, max: number) {
   return Math.floor(Math.random() * (max - min)) + min;
@@ -11,4 +13,14 @@ export function imageLoader(src: string): Promise<any> {
     image.onerror = reject;
     image.src = src;
   });
+}
+
+// Calculate FPS
+export function calculateFPS(): void {
+  const now = performance.now();
+  while (this.frames.length > 0 && this.frames[0] <= now - 1000) {
+    this.frames.shift();
+  }
+  this.frames.push(now);
+  this.fps = this.frames.length;
 }
